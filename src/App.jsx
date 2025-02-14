@@ -1,7 +1,10 @@
 import React from 'react'
+import { InitialGameScreen } from './components/InitialGameScreen'
 const App = () => {
   return (
-    <div className='text-[red]'>App</div>
+    <div className='w-full h-[100dvh] flex'>
+      <InitialGameScreen/>
+    </div>
   )
 }
 
