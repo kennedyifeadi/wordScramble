@@ -8,7 +8,7 @@ export const InitialGameScreen = () => {
     console.log(clicked);
   }, [clicked])
   return (
-    <div className={`${clicked ? "" : ""} w-full h-full bg-[#060606] text-[#ffffff1a] absolute top-0 flex flex-col justify-center items-center`}>
+    <div className={`${clicked ? "top-[-100%] duration-1000" : "top-0"} w-full h-full bg-[#060606] text-[#ffffff1a] absolute top-0 flex flex-col justify-center items-center`}>
       <Squares
         speed={0.1}
         squareSize={40}
@@ -30,7 +30,7 @@ export const InitialGameScreen = () => {
       </div>
       <div className="flex gap-2.5 w-[20%] z-20 justify-between h-max">
         <div className="w-max h-max">
-          <button className="h-[2.3rem] w-[5rem] text-[#EDEDED] hover:bg-[#7D1DBE] duration-300 ease-in-out cursor-pointer font-bold rounded-sm bg-[#6A0DAD]" onClick={() => setClicked(!clicked)}>
+          <button className="h-[2.3rem] w-[5rem] text-[#EDEDED] hover:bg-[#7D1DBE] duration-300 ease-in-out cursor-pointer font-bold rounded-sm bg-[#6A0DAD] active:scale-95 transition-all" onClick={() => setClicked(!clicked)}>
             Ready
           </button>
         </div>
