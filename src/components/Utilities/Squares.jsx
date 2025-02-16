@@ -127,5 +127,5 @@ export const Squares = ({
     };
   }, [direction, speed, borderColor, hoverFillColor, hoveredSquare, squareSize]);
 
-  return <canvas ref={canvasRef} className="w-full h-full border-none block"></canvas>;
+  return <canvas ref={canvasRef} className="w-full h-full border-none block absolute top-0"></canvas>;
 };
