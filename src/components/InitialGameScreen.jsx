@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Squares } from "./Utilities/Squares";
 import { DecryptedText } from './Utilities/DecryptedText'
+import { GameRules } from "./GameRules";
 
 export const InitialGameScreen = () => {
   const [clicked, setClicked] = useState(false)
+  const [rulesClicked, setRulesClicked] = useState(false)
   useEffect(()=>{
-    console.log(clicked);
-  }, [clicked])
+    console.log(rulesClicked);
+  }, [rulesClicked])
   return (
     <div className={`${clicked ? "top-[-100%] duration-1000" : "top-0"} w-full h-full bg-[#060606] text-[#ffffff1a] absolute top-0 flex flex-col justify-center items-center`}>
       <Squares
@@ -34,10 +36,13 @@ export const InitialGameScreen = () => {
             Ready
           </button>
         </div>
-        <div className="w-max h-max">
-          <button className="h-[2.3rem] w-[5rem] bg-[#3A3A3A] text-[#EDEDED] hover:bg-[#4A4A4A] duration-300 ease-in-out cursor-pointer font-bold rounded-sm">
+        <div className="w-max h-max relative">
+          <button className="h-[2.3rem] w-[5rem] bg-[#3A3A3A] text-[#EDEDED] hover:bg-[#4A4A4A] duration-300 ease-in-out cursor-pointer font-bold rounded-sm" onClick={()=> setRulesClicked(!rulesClicked)}>
             Rules
           </button>
+          <div className={`absolute text-white duration-300 ease-in-out transition-all ${rulesClicked ? "opacity-100 top-0" : "opacity-0 top-[100%]"}`}>
+            <GameRules/>
+          </div>
         </div>
       </div>
     </div>
