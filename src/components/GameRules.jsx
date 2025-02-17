@@ -35,13 +35,13 @@ export const GameRules = () => {
 
   return (
     <div 
-      className='w-72 h-72 bg-[#1E1E1E] rounded-md relative text-[#EDEDED] border-3 shadow-2xl border-[#2c2c2c] overflow-auto cursor-pointer'
+      className='w-[95dvw] md:w-72 h-[240px] md:h-72 bg-[#1E1E1E] rounded-md relative text-[#EDEDED] border-3 shadow-2xl border-[#2c2c2c] overflow-auto cursor-pointer'
       onClick={handleClick}
     >
       <h1 className='font-bold text-center text-2xl sticky bg-[#1E1E1E] border-b-3 border-[#2c2c2c] top-0'>Don't <span className='text-[#6A0DAD]'>Click</span> Me!!
       </h1>
       
-      <ul className='list-decimal px-6 text-[#EDEDED]'>
+      <ul className='list-decimal px-[26px] text-[#EDEDED]'>
         <li>
           <h1 className='font-bold text-[#6A0DAD]'>{wrapWords("Objective")}</h1>
           <p className='text-sm'>{wrapWords("Unscramble the letters to find the correct word.")}</p>
