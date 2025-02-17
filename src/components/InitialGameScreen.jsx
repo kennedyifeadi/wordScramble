@@ -40,7 +40,7 @@ export const InitialGameScreen = () => {
           <button className="h-[2.3rem] w-[5rem] bg-[#3A3A3A] text-[#EDEDED] hover:bg-[#4A4A4A] duration-300 ease-in-out cursor-pointer font-bold rounded-sm" onClick={()=> setRulesClicked(!rulesClicked)}>
             Rules
           </button>
-          <div className={`absolute text-white duration-500 ease-in-out transition-all ${rulesClicked ? "opacity-100 top-[-2rem] right-[-20rem]" : "opacity-0 top-[100%] right-[-20rem]"}`}>
+          <div className={`absolute text-white duration-500 ease-in-out transition-all ${rulesClicked ? "opacity-100 top-[-1rem] right-[-20rem]" : "opacity-0 top-[100%] right-[-20rem]"}`}>
             <GameRules/>
           </div>
         </div>
