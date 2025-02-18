@@ -1,0 +1,42 @@
+import React, { useEffect, useState } from 'react'
+import { Keyboard } from './Keyboard'
+import { InputBox } from './InputBox'
+import { Timer } from './Timer';
+
+export const Gameplay = () => {
+    const[wordPassedCount, setWordPassedCount] = useState(0);
+    const [scrambledCorrect, setScrambledCorrect] = useState(false)
+    useEffect(()=>{
+        if (scrambledCorrect) {
+            setWordPassedCount(wordPassedCount + 1);
+            setScrambledCorrect(false); 
+        }
+    }, [scrambledCorrect])
+  return (
+    <div className='w-full h-full bg-[#121212] flex justify-center items-center'>
+        <div className='bg-[#181818] p-4 w-[35%] h-[80%] flex flex-col border-2 border-[#302f2f] shadow-md rounded-md'>
+            <div className='flex w-full h-max justify-between px-2'>
+                <div>
+                    <InputBox/>
+                </div>
+                <div className='flex gap-4 justify-center items-center'>
+                    <div className='w-max h-max px-1 text-[#EDEDED] font-bold text-[12px] rounded-full flex justify-center items-center border-2 border-[#302f2f]'>{wordPassedCount}</div>
+                    <div className='w-max h-max text-[#EDEDED] font-bold rounded-full flex justify-center items-center border-2 border-[#302f2f] px-1'>
+                        <Timer duration={30 * 1000} noOfWordsPassed={wordPassedCount} wordCorrect={wordPassedCount}/>
+                    </div>
+                </div>
+            </div>
+            <div>
+            <InputBox/>
+            <InputBox/>
+            <InputBox/>
+            <InputBox/>
+            <InputBox/>
+            </div>
+            <div>
+                <Keyboard/>
+            </div>
+        </div>
+    </div>
+  )
+}

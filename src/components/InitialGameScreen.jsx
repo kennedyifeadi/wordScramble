@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Squares } from "./Utilities/Squares";
 import { DecryptedText } from './Utilities/DecryptedText'
 import { GameRules } from "./GameRules";
+import { GameContext } from "./context/GameContext"
 
 export const InitialGameScreen = () => {
+  const { timerState, setTimerState } = useContext(GameContext);
   const [clicked, setClicked] = useState(false)
   const [rulesClicked, setRulesClicked] = useState(false)
-  useEffect(()=>{
-    console.log(rulesClicked);
-  }, [rulesClicked])
   return (
     <div className={`${clicked ? "top-[-100%] duration-1000" : "top-0"} w-full h-full bg-[#060606] text-[#ffffff1a] absolute top-0 flex flex-col justify-center items-center`}>
       <Squares
@@ -32,7 +31,7 @@ export const InitialGameScreen = () => {
       </div>
       <div className="flex gap-2.5 w-[60%] mt-2.5 md:mt-0 md:w-[20%] z-20 justify-between h-max">
         <div className="w-max h-max">
-          <button className="h-[2.3rem] w-[5rem] text-[#EDEDED] hover:bg-[#7D1DBE] duration-300 ease-in-out cursor-pointer font-bold rounded-sm bg-[#6A0DAD] active:scale-95 transition-all" onClick={() => setClicked(!clicked)}>
+          <button className="h-[2.3rem] w-[5rem] text-[#EDEDED] hover:bg-[#7D1DBE] duration-300 ease-in-out cursor-pointer font-bold rounded-sm bg-[#6A0DAD] active:scale-95 transition-all" onClick={() => {setClicked(!clicked); setTimerState(true)}}>
             Ready
           </button>
         </div>
@@ -40,7 +39,7 @@ export const InitialGameScreen = () => {
           <button className="h-[2.3rem] w-[5rem] bg-[#3A3A3A] text-[#EDEDED] hover:bg-[#4A4A4A] duration-300 ease-in-out cursor-pointer font-bold rounded-sm" onClick={()=> setRulesClicked(!rulesClicked)}>
             Rules
           </button>
-          <div className={`absolute text-white duration-500 ease-in-out transition-all ${rulesClicked ? "opacity-100 top-16 md:top-[-1rem] right-[-4rem] md:right-[-20rem]" : "opacity-0 top-[100%] right-[-4rem] md:right-[-20rem]"}`}>
+          <div className={`absolute text-[#EDEDED] duration-500 ease-in-out transition-all ${rulesClicked ? "opacity-100 top-16 md:top-[-1rem] right-[-4rem] md:right-[-20rem]" : "opacity-0 top-[100%] right-[-4rem] md:right-[-20rem]"}`}>
             <GameRules/>
           </div>
         </div>
