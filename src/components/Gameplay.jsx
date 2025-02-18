@@ -1,93 +1,164 @@
-import React, { useEffect, useState } from 'react'
-import { Keyboard } from './Keyboard'
-import { InputBox } from './InputBox'
-import { Timer } from './Timer';
-import { useScrambledWord } from './hooks/useScrambledWord'
+import React, { useEffect, useState, useRef, useContext } from 'react';
+import { GameContext } from './context/GameContext';
+import { Words } from '../data/words';
 
 export const Gameplay = () => {
-    const[wordPassedCount, setWordPassedCount] = useState(0);
-    const [scrambledCorrect, setScrambledCorrect] = useState(false)
-    const scrambled = useScrambledWord();
-    useEffect(()=>{
-        if (scrambledCorrect) {
-            setWordPassedCount(wordPassedCount + 1);
-            setScrambledCorrect(false); 
-        }
-    }, [scrambledCorrect])
+  const {
+    currentWordIndex, setCurrentWordIndex,
+    currentAttempt, setCurrentAttempt,
+    gameOver, setGameOver,
+    score, setScore,
+    hint, setHint
+  } = useContext(GameContext);
+
+  const [currentGuess, setCurrentGuess] = useState(Array(5).fill(''));
+  const [scrambledWord, setScrambledWord] = useState('');
+  const [message, setMessage] = useState('');
+  const inputRefs = useRef([]);
+
+  useEffect(() => {
+    scrambleCurrentWord();
+    setHint(Words[0][currentWordIndex].hint);
+  }, [currentWordIndex]);
+
+  const scrambleCurrentWord = () => {
+    const word = Words[0][currentWordIndex].word.toUpperCase();
+    let scrambled = word;
+    while (scrambled === word) {
+      scrambled = [...word].sort(() => Math.random() - 0.5).join('');
+    }
+    setScrambledWord(scrambled);
+  };
+
+  const handleKeyPress = (key) => {
+    if (gameOver) return;
+
+    if (!/^[A-Z]$/.test(key) && key !== 'Backspace') return;
+
+    if (key === 'Backspace') {
+      handleBackspace();
+      return;
+    }
+
+    const currentEmpty = currentGuess.findIndex(letter => letter === '');
+    if (currentEmpty === -1) return;
+
+    const newGuess = [...currentGuess];
+    newGuess[currentEmpty] = key;
+    setCurrentGuess(newGuess);
+
+    if (currentEmpty < 4 && inputRefs.current[currentEmpty + 1]) {
+      inputRefs.current[currentEmpty + 1].focus();
+    }
+  };
+
+  const handleBackspace = () => {
+    const lastFilled = currentGuess.map(letter => letter !== '').lastIndexOf(true);
+    if (lastFilled === -1) return;
+
+    const newGuess = [...currentGuess];
+    newGuess[lastFilled] = '';
+    setCurrentGuess(newGuess);
+
+    if (inputRefs.current[lastFilled]) {
+      inputRefs.current[lastFilled].focus();
+    }
+  };
+
+  const checkWord = () => {
+    const guess = currentGuess.join('').toUpperCase();
+    const correctWord = Words[0][currentWordIndex].word.toUpperCase();
+
+    console.log('Correct Word:', correctWord);
+    console.log('User Guess:', guess);
+
+    if (guess === correctWord) {
+      handleCorrectGuess();
+    } else {
+      handleIncorrectGuess();
+    }
+  };
+
+  const handleCorrectGuess = () => {
+    setScore(score + 100);
+    setMessage('Correct! Well done!');
+
+    if (currentWordIndex < Words[0].length - 1) {
+      setTimeout(() => {
+        setCurrentWordIndex(currentWordIndex + 1);
+        setCurrentGuess(Array(5).fill(''));
+        setCurrentAttempt(1);
+        setMessage('');
+      }, 1500);
+    } else {
+      handleGameOver();
+    }
+  };
+
+  const handleIncorrectGuess = () => {
+    if (currentAttempt >= 5) {
+      handleGameOver();
+      return;
+    }
+
+    setCurrentAttempt(currentAttempt + 1);
+    setCurrentGuess(Array(5).fill(''));
+    setMessage('Incorrect! Try again.');
+  };
+
+  const handleGameOver = () => {
+    setGameOver(true);
+    setMessage('Game Over! Restarting...');
+    
+    setTimeout(() => {
+      setGameOver(false);
+      setCurrentWordIndex(0);
+      setCurrentGuess(Array(5).fill(''));
+      setCurrentAttempt(1);
+      setScore(0);
+      setMessage('');
+    }, 2000); // Restart after 2 seconds
+  };
+
   return (
     <div className='w-full h-full bg-[#121212] flex justify-center items-center'>
-        <div className='bg-[#181818] p-4 w-[35%] h-[80%] flex flex-col border-2 border-[#302f2f] shadow-md rounded-md'>
-            <div className='flex w-full h-max justify-between mb-8'>
-                <div className='w-[80%] flex justify-between items-center'>
-                    <InputBox letter={scrambled[0]} isReadOnly={true} />
-                    <div className='w-[4%] h-[2px] bg-[#333333] '>
-                    </div>
-                    <InputBox letter={scrambled[1]} isReadOnly={true} />
-                    <div className='w-[4%] h-[2px] bg-[#333333] '>
-                    </div>
-                    <InputBox letter={scrambled[2]} isReadOnly={true} />
-                    <div className='w-[4%] h-[2px] bg-[#333333] '>
-                    </div>
-                    <InputBox letter={scrambled[3]} isReadOnly={true} />
-                    <div className='w-[4%] h-[2px] bg-[#333333] '>
-                    </div>
-                    <InputBox letter={scrambled[4]}isReadOnly={true} />
-                </div>
-                <div className='flex gap-4 justify-center items-center'>
-                    <div className='w-max h-max px-1 text-[#EDEDED] font-bold text-[12px] rounded-full flex justify-center items-center border-2 border-[#302f2f]'>{wordPassedCount}</div>
-                    <div className='w-max h-max text-[#EDEDED] font-bold rounded-full flex justify-center items-center border-2 border-[#302f2f] px-1'>
-                        <Timer duration={30 * 1000} noOfWordsPassed={wordPassedCount} wordCorrect={wordPassedCount}/>
-                    </div>
-                </div>
-            </div>
-            <div className='flex flex-col w-[80%] h-max gap-4'>
-                <div className='flex w-full justify-between'>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                </div>
-                <div className='flex w-full justify-between'>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                </div>
-                <div className='flex w-full justify-between'>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                </div>
-                <div className='flex w-full justify-between'>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                </div>
-                <div className='flex w-full justify-between'>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                </div>
-                <div className='flex w-full justify-between'>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                    <InputBox/>
-                </div>
-            </div>
-            <div>
-                <Keyboard/>
-            </div>
+      <div className='bg-[#181818] px-4 py-2 w-[35%] h-[80%] flex flex-col border-2 border-[#302f2f] shadow-md rounded-md'>
+        <div className='w-full h-max mb-4 flex flex-col items-center'>
+          <h1 className='font-bold text-5xl text-[#EDEDED] mb-4'>
+            Un<span className='text-[#6A0DAD]'>Scramble</span> me!!
+          </h1>
+          <div className='text-[#EDEDED] mb-2'>Hint: {hint}</div>
+          <div className='text-[#6A0DAD] font-bold'>Score: {score}</div>
+          {message && <div className='text-[#EDEDED] mt-2'>{message}</div>}
         </div>
+
+        <div className='flex justify-center mb-4'>
+          <div className='text-[#EDEDED] text-2xl font-bold tracking-wider'>
+            {scrambledWord}
+          </div>
+        </div>
+
+        <div className='flex justify-center gap-2 mb-8'>
+          {currentGuess.map((letter, index) => (
+            <input
+              key={index}
+              ref={(el) => (inputRefs.current[index] = el)}
+              value={letter}
+              onKeyDown={(e) => handleKeyPress(e.key.toUpperCase())}
+              className='w-12 h-12 bg-[#2d2d2d] text-[#EDEDED] text-center text-2xl font-bold rounded'
+              readOnly
+            />
+          ))}
+        </div>
+
+        <button
+          onClick={checkWord}
+          className='mt-4 py-2 bg-[#6A0DAD] text-[#EDEDED] rounded font-bold hover:bg-[#7d1dbe] transition-colors'
+          disabled={currentGuess.includes('')}
+        >
+          Submit
+        </button>
+      </div>
     </div>
-  )
-}
+  );
+};

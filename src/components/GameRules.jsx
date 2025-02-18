@@ -47,20 +47,20 @@ export const GameRules = () => {
           <p className='text-sm'>{wrapWords("Unscramble the letters to find the correct word.")}</p>
         </li>
         <li>
-          <h1 className='font-bold text-[#6A0DAD]'>{wrapWords("⏳30-Second Per Word Rule")}</h1>
-          <p className='text-sm'>{wrapWords("Each word must be solved within 30 seconds. If the timer runs out, you lose that word, and the next one appears.")}</p>
+          <h1 className='font-bold text-[#6A0DAD]'>{wrapWords("⏳ Limited Attempts")}</h1>
+          <p className='text-sm'>{wrapWords("You have 5 attempts to guess the correct word. If you fail after 5 tries, the game will restart from the first word.")}</p>
         </li>
         <li>
-          <h1 className='font-bold text-[#6A0DAD]'>{wrapWords("⏱️Bonus Time Carryover")}</h1>
-          <p className='text-sm'>{wrapWords("If you solve a word before the 30 seconds expire, the remaining time is added to the next word's time.")}</p>
+          <h1 className='font-bold text-[#6A0DAD]'>{wrapWords("⏱️Scoring System")}</h1>
+          <p className='text-sm'>{wrapWords("Each correct guess earns 100 points. If you guess the word correctly, you move to the next round.")}</p>
         </li>
         <li>
-          <h1 className='font-bold text-[#6A0DAD]'>{wrapWords("⏰Total Game Duration")}</h1>
-          <p className='text-sm'>{wrapWords("The entire game lasts for 2 minutes 30 seconds (150 seconds total). After this, the game ends.")}</p>
+          <h1 className='font-bold text-[#6A0DAD]'>{wrapWords("⏰Letter Entry")}</h1>
+          <p className='text-sm'>{wrapWords("Letters can only be entered one at a time in the input boxes.")}</p>
         </li>
         <li>
-          <h1 className='font-bold text-[#6A0DAD]'>{wrapWords("🚨Game Over Condition")}</h1>
-          <p className='text-sm'>{wrapWords("The game ends when the total 2 minutes 30 seconds runs out, even if you still have words left.")}</p>
+          <h1 className='font-bold text-[#6A0DAD]'>{wrapWords("🚨Game Over and Restart")}</h1>
+          <p className='text-sm'>{wrapWords("If you run out of attempts or complete all words, the game will display 'Game Over' and restart from the beginning after 2 seconds.")}</p>
         </li>
       </ul>
     </div>
