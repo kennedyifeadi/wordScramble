@@ -144,6 +144,7 @@ export const Gameplay = () => {
             key={index}
             ref={(el) => (inputRefs.current[index] = el)}
             value={letter}
+            readOnly
             onClick={() => inputRefs.current[index]?.focus()} // Ensures focus on mobile
             onKeyDown={(e) => handleKeyPress(e.key.toUpperCase())} // Allows keyboard input
             className='w-12 h-12 bg-[#2d2d2d] text-[#EDEDED] text-center text-2xl font-bold rounded'
