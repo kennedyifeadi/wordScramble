@@ -122,9 +122,9 @@ export const Gameplay = () => {
 
   return (
     <div className='w-full h-full bg-[#121212] flex justify-center items-center'>
-      <div className='bg-[#181818] px-4 py-2 w-[35%] h-[80%] flex flex-col border-2 border-[#302f2f] shadow-md rounded-md'>
+      <div className='bg-[#181818] px-4 py-2 w-[90%] md:w-[35%] h-max md:h-[80%] flex flex-col border-2 border-[#302f2f] shadow-md rounded-md'>
         <div className='w-full h-max mb-4 flex flex-col items-center'>
-          <h1 className='font-bold text-5xl text-[#EDEDED] mb-4'>
+          <h1 className='font-bold text-3xl md:text-5xl text-[#EDEDED] mb-4'>
             Un<span className='text-[#6A0DAD]'>Scramble</span> me!!
           </h1>
           <div className='text-[#EDEDED] mb-2'>Hint: {hint}</div>
@@ -141,19 +141,19 @@ export const Gameplay = () => {
         <div className='flex justify-center gap-2 mb-8'>
           {currentGuess.map((letter, index) => (
             <input
-              key={index}
-              ref={(el) => (inputRefs.current[index] = el)}
-              value={letter}
-              onKeyDown={(e) => handleKeyPress(e.key.toUpperCase())}
-              className='w-12 h-12 bg-[#2d2d2d] text-[#EDEDED] text-center text-2xl font-bold rounded'
-              readOnly
-            />
+            key={index}
+            ref={(el) => (inputRefs.current[index] = el)}
+            value={letter}
+            onClick={() => inputRefs.current[index]?.focus()} // Ensures focus on mobile
+            onKeyDown={(e) => handleKeyPress(e.key.toUpperCase())} // Allows keyboard input
+            className='w-12 h-12 bg-[#2d2d2d] text-[#EDEDED] text-center text-2xl font-bold rounded'
+          />
           ))}
         </div>
 
         <button
           onClick={checkWord}
-          className='mt-4 py-2 bg-[#6A0DAD] text-[#EDEDED] rounded font-bold hover:bg-[#7d1dbe] transition-colors'
+          className='mt-4 py-2 bg-[#6A0DAD] text-[#EDEDED] active:scale-95 ease-in-out duration-1000 rounded font-bold hover:bg-[#7d1dbe] transition-colors'
           disabled={currentGuess.includes('')}
         >
           Submit

@@ -55,8 +55,8 @@ export const GameRules = () => {
           <p className='text-sm'>{wrapWords("Each correct guess earns 100 points. If you guess the word correctly, you move to the next round.")}</p>
         </li>
         <li>
-          <h1 className='font-bold text-[#6A0DAD]'>{wrapWords("⏰Letter Entry")}</h1>
-          <p className='text-sm'>{wrapWords("Letters can only be entered one at a time in the input boxes.")}</p>
+          <h1 className='font-bold text-[#6A0DAD]'>{wrapWords("⏰Letter Entry & Deletion")}</h1>
+          <p className='text-sm'>{wrapWords("Letters can only be entered one at a time in the input boxes. and once entered, it's can't be taken back")}</p>
         </li>
         <li>
           <h1 className='font-bold text-[#6A0DAD]'>{wrapWords("🚨Game Over and Restart")}</h1>
