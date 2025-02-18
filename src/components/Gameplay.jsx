@@ -15,8 +15,20 @@ export const Gameplay = () => {
   return (
     <div className='w-full h-full bg-[#121212] flex justify-center items-center'>
         <div className='bg-[#181818] p-4 w-[35%] h-[80%] flex flex-col border-2 border-[#302f2f] shadow-md rounded-md'>
-            <div className='flex w-full h-max justify-between px-2'>
-                <div>
+            <div className='flex w-full h-max justify-between mb-8'>
+                <div className='w-[80%] flex justify-between items-center'>
+                    <InputBox/>
+                    <div className='w-[4%] h-[2px] bg-[#333333] '>
+                    </div>
+                    <InputBox/>
+                    <div className='w-[4%] h-[2px] bg-[#333333] '>
+                    </div>
+                    <InputBox/>
+                    <div className='w-[4%] h-[2px] bg-[#333333] '>
+                    </div>
+                    <InputBox/>
+                    <div className='w-[4%] h-[2px] bg-[#333333] '>
+                    </div>
                     <InputBox/>
                 </div>
                 <div className='flex gap-4 justify-center items-center'>
@@ -26,12 +38,49 @@ export const Gameplay = () => {
                     </div>
                 </div>
             </div>
-            <div>
-            <InputBox/>
-            <InputBox/>
-            <InputBox/>
-            <InputBox/>
-            <InputBox/>
+            <div className='flex flex-col w-[80%] h-max gap-4'>
+                <div className='flex w-full justify-between'>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                </div>
+                <div className='flex w-full justify-between'>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                </div>
+                <div className='flex w-full justify-between'>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                </div>
+                <div className='flex w-full justify-between'>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                </div>
+                <div className='flex w-full justify-between'>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                </div>
+                <div className='flex w-full justify-between'>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                    <InputBox/>
+                </div>
             </div>
             <div>
                 <Keyboard/>

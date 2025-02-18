@@ -25,7 +25,7 @@ export const Timer = ({duration, noOfWordsPassed, wordCorrect}) => {
         let seconds = parseInt(totalSeconds % 60)
         let mintues = parseInt(totalMinitues % 60)
 
-        return `${mintues}: ${seconds}`
+        return `${mintues}:${seconds}`
     }
   return (
     <div>{timerFormat(time)}</div>
