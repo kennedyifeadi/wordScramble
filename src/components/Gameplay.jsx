@@ -4,7 +4,7 @@ import { Words } from '../data/words';
 
 export const Gameplay = () => {
   const {
-    currentWordIndex, setCurrentWordIndex,
+    // currentWordIndex, setCurrentWordIndex,
     currentAttempt, setCurrentAttempt,
     gameOver, setGameOver,
     score, setScore,
@@ -15,14 +15,16 @@ export const Gameplay = () => {
   const [scrambledWord, setScrambledWord] = useState('');
   const [message, setMessage] = useState('');
   const inputRefs = useRef([]);
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentWordIndex, setCurrentWordIndex] = useState(0)
 
   useEffect(() => {
     scrambleCurrentWord();
-    setHint(Words[0][currentWordIndex].hint);
-  }, [currentWordIndex]);
+    setHint(Words[currentIndex][currentWordIndex].hint);
+  }, [currentIndex, currentWordIndex]);
 
   const scrambleCurrentWord = () => {
-    const word = Words[0][currentWordIndex].word.toUpperCase();
+    const word = Words[currentIndex][currentWordIndex].word.toUpperCase();
     let scrambled = word;
     while (scrambled === word) {
       scrambled = [...word].sort(() => Math.random() - 0.5).join('');
@@ -67,7 +69,7 @@ export const Gameplay = () => {
 
   const checkWord = () => {
     const guess = currentGuess.join('').toUpperCase();
-    const correctWord = Words[0][currentWordIndex].word.toUpperCase();
+    const correctWord = Words[currentIndex][currentWordIndex].word.toUpperCase();
 
     console.log('Correct Word:', correctWord);
     console.log('User Guess:', guess);
@@ -83,7 +85,7 @@ export const Gameplay = () => {
     setScore(score + 100);
     setMessage('Correct! Well done!');
 
-    if (currentWordIndex < Words[0].length - 1) {
+    if (currentWordIndex < Words[currentIndex].length - 1) {
       setTimeout(() => {
         setCurrentWordIndex(currentWordIndex + 1);
         setCurrentGuess(Array(5).fill(''));
@@ -96,7 +98,7 @@ export const Gameplay = () => {
   };
 
   const handleIncorrectGuess = () => {
-    if (currentAttempt >= 5) {
+    if (currentAttempt >= 3) {
       handleGameOver();
       return;
     }
@@ -109,6 +111,11 @@ export const Gameplay = () => {
   const handleGameOver = () => {
     setGameOver(true);
     setMessage('Game Over! Restarting...');
+    if(currentIndex < 4){
+      setCurrentIndex(currentIndex + 1)
+    }else{
+      setCurrentWordIndex(currentIndex - 4)
+    }
     
     setTimeout(() => {
       setGameOver(false);
@@ -117,7 +124,7 @@ export const Gameplay = () => {
       setCurrentAttempt(1);
       setScore(0);
       setMessage('');
-    }, 2000); // Restart after 2 seconds
+    }, 1000); // Restart after 2 seconds
   };
 
   return (
@@ -144,7 +151,6 @@ export const Gameplay = () => {
             key={index}
             ref={(el) => (inputRefs.current[index] = el)}
             value={letter}
-            readOnly
             onClick={() => inputRefs.current[index]?.focus()} // Ensures focus on mobile
             onKeyDown={(e) => handleKeyPress(e.key.toUpperCase())} // Allows keyboard input
             className='w-12 h-12 bg-[#2d2d2d] text-[#EDEDED] text-center text-2xl font-bold rounded'
