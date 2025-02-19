@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { GameContext } from './context/GameContext';
 import { Words } from '../data/words';
 
@@ -31,22 +31,29 @@ export const Gameplay = () => {
     setScrambledWord(scrambled);
   };
 
-  // Updated input handling for better mobile support
-  const handleInput = (index, value) => {
+  const handleKeyDown = (index, e) => {
     if (gameOver) return;
 
-    // Handle backspace
-    if (value === '') {
-      const newGuess = [...currentGuess];
-      newGuess[index] = '';
-      setCurrentGuess(newGuess);
+    if (e.key === 'Backspace') {
+      e.preventDefault();
       
-      // Focus previous input on backspace
-      if (index > 0) {
+      // If current input is empty, move to and clear previous input
+      if (currentGuess[index] === '' && index > 0) {
+        const newGuess = [...currentGuess];
+        newGuess[index - 1] = '';
+        setCurrentGuess(newGuess);
         inputRefs.current[index - 1]?.focus();
+      } else {
+        // Clear current input
+        const newGuess = [...currentGuess];
+        newGuess[index] = '';
+        setCurrentGuess(newGuess);
       }
-      return;
     }
+  };
+
+  const handleInput = (index, value) => {
+    if (gameOver) return;
 
     // Handle regular input
     const char = value.slice(-1).toUpperCase();
@@ -148,6 +155,7 @@ export const Gameplay = () => {
               type="text"
               autoCapitalize="characters"
               onClick={() => inputRefs.current[index]?.focus()}
+              onKeyDown={(e) => handleKeyDown(index, e)}
               onChange={(e) => handleInput(index, e.target.value)}
               className='w-12 h-12 bg-[#2d2d2d] text-[#EDEDED] text-center text-2xl font-bold rounded'
             />
