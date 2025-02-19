@@ -15,7 +15,7 @@ export const Gameplay = () => {
   const [message, setMessage] = useState('');
   const inputRefs = useRef([]);
   const [currentIndex, setCurrentIndex] = useState(Math.floor(Math.random() * 5));
-  const [currentWordIndex, setCurrentWordIndex] = useState(Math.floor(Math.random() * 5));
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
   useEffect(() => {
     scrambleCurrentWord();
