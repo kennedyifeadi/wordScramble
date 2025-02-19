@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useRef, useContext, useCallback } from 'react';
 import { GameContext } from './context/GameContext';
 import { Words } from '../data/words';
 
@@ -32,23 +32,25 @@ export const Gameplay = () => {
     setScrambledWord(scrambled);
   };
 
-  const handleKeyPress = (key) => {
+  const handleKeyPress = (e) => {
     if (gameOver) return;
-
-    if (!/^[A-Z]$/.test(key) && key !== 'Backspace') return;
-
-    if (key === 'Backspace') {
+  
+    const key = e.key.toUpperCase();
+    
+    if (key === 'BACKSPACE') {
       handleBackspace();
       return;
     }
-
+  
+    if (!/^[A-Z]$/.test(key)) return;
+  
     const currentEmpty = currentGuess.findIndex(letter => letter === '');
     if (currentEmpty === -1) return;
-
+  
     const newGuess = [...currentGuess];
     newGuess[currentEmpty] = key;
     setCurrentGuess(newGuess);
-
+  
     if (currentEmpty < 4 && inputRefs.current[currentEmpty + 1]) {
       inputRefs.current[currentEmpty + 1].focus();
     }
@@ -117,6 +119,7 @@ export const Gameplay = () => {
       setCurrentWordIndex(currentIndex - 4)
     }
     
+
     setTimeout(() => {
       setGameOver(false);
       setCurrentWordIndex(0);
@@ -124,8 +127,16 @@ export const Gameplay = () => {
       setCurrentAttempt(1);
       setScore(0);
       setMessage('');
-    }, 1000); // Restart after 2 seconds
+    }, 1000); 
   };
+
+  const letterOnchange = useCallback((index, value) => {
+    setCurrentGuess(prevGuess => {
+      const newGuess = [...prevGuess];
+      newGuess[index] = value.toUpperCase();
+      return newGuess;
+    });
+  }, []);
 
   return (
     <div className='w-full h-full bg-[#121212] flex justify-center items-center'>
@@ -147,14 +158,16 @@ export const Gameplay = () => {
 
         <div className='flex justify-center gap-2 mb-8'>
           {currentGuess.map((letter, index) => (
-            <input
-            key={index}
-            ref={(el) => (inputRefs.current[index] = el)}
-            value={letter}
-            onClick={() => inputRefs.current[index]?.focus()} // Ensures focus on mobile
-            onKeyDown={(e) => handleKeyPress(e.key.toUpperCase())} // Allows keyboard input
-            className='w-12 h-12 bg-[#2d2d2d] text-[#EDEDED] text-center text-2xl font-bold rounded'
-          />
+           <input
+           key={index}
+           ref={(el) => (inputRefs.current[index] = el)}
+           value={letter}
+           maxLength={1}
+           onClick={() => inputRefs.current[index]?.focus()} 
+           onKeyDown={handleKeyPress} 
+           onChange={(e) => letterOnchange(index-1, e.target.value)}
+           className='w-12 h-12 bg-[#2d2d2d] text-[#EDEDED] text-center text-2xl font-bold rounded'
+         />
           ))}
         </div>
 
