@@ -4,7 +4,6 @@ import { Words } from '../data/words';
 
 export const Gameplay = () => {
   const {
-    // currentWordIndex, setCurrentWordIndex,
     currentAttempt, setCurrentAttempt,
     gameOver, setGameOver,
     score, setScore,
@@ -15,8 +14,8 @@ export const Gameplay = () => {
   const [scrambledWord, setScrambledWord] = useState('');
   const [message, setMessage] = useState('');
   const inputRefs = useRef([]);
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [currentWordIndex, setCurrentWordIndex] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
   useEffect(() => {
     scrambleCurrentWord();
@@ -32,49 +31,40 @@ export const Gameplay = () => {
     setScrambledWord(scrambled);
   };
 
-  const handleKeyPress = (e) => {
+  // Updated input handling for better mobile support
+  const handleInput = (index, value) => {
     if (gameOver) return;
-  
-    const key = e.key.toUpperCase();
-    
-    if (key === 'BACKSPACE') {
-      handleBackspace();
+
+    // Handle backspace
+    if (value === '') {
+      const newGuess = [...currentGuess];
+      newGuess[index] = '';
+      setCurrentGuess(newGuess);
+      
+      // Focus previous input on backspace
+      if (index > 0) {
+        inputRefs.current[index - 1]?.focus();
+      }
       return;
     }
-  
-    if (!/^[A-Z]$/.test(key)) return;
-  
-    const currentEmpty = currentGuess.findIndex(letter => letter === '');
-    if (currentEmpty === -1) return;
-  
-    const newGuess = [...currentGuess];
-    newGuess[currentEmpty] = key;
-    setCurrentGuess(newGuess);
-  
-    if (currentEmpty < 4 && inputRefs.current[currentEmpty + 1]) {
-      inputRefs.current[currentEmpty + 1].focus();
-    }
-  };
 
-  const handleBackspace = () => {
-    const lastFilled = currentGuess.map(letter => letter !== '').lastIndexOf(true);
-    if (lastFilled === -1) return;
+    // Handle regular input
+    const char = value.slice(-1).toUpperCase();
+    if (/^[A-Z]$/.test(char)) {
+      const newGuess = [...currentGuess];
+      newGuess[index] = char;
+      setCurrentGuess(newGuess);
 
-    const newGuess = [...currentGuess];
-    newGuess[lastFilled] = '';
-    setCurrentGuess(newGuess);
-
-    if (inputRefs.current[lastFilled]) {
-      inputRefs.current[lastFilled].focus();
+      // Auto-advance to next input
+      if (index < 4) {
+        inputRefs.current[index + 1]?.focus();
+      }
     }
   };
 
   const checkWord = () => {
     const guess = currentGuess.join('').toUpperCase();
     const correctWord = Words[currentIndex][currentWordIndex].word.toUpperCase();
-
-    console.log('Correct Word:', correctWord);
-    console.log('User Guess:', guess);
 
     if (guess === correctWord) {
       handleCorrectGuess();
@@ -113,12 +103,11 @@ export const Gameplay = () => {
   const handleGameOver = () => {
     setGameOver(true);
     setMessage('Game Over! Restarting...');
-    if(currentIndex < 4){
-      setCurrentIndex(currentIndex + 1)
-    }else{
-      setCurrentWordIndex(currentIndex - 4)
+    if (currentIndex < 4) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      setCurrentWordIndex(currentIndex - 4);
     }
-    
 
     setTimeout(() => {
       setGameOver(false);
@@ -127,16 +116,8 @@ export const Gameplay = () => {
       setCurrentAttempt(1);
       setScore(0);
       setMessage('');
-    }, 1000); 
+    }, 1000);
   };
-
-  const letterOnchange = useCallback((index, value) => {
-    setCurrentGuess(prevGuess => {
-      const newGuess = [...prevGuess];
-      newGuess[index] = value.toUpperCase();
-      return newGuess;
-    });
-  }, []);
 
   return (
     <div className='w-full h-full bg-[#121212] flex justify-center items-center'>
@@ -158,16 +139,18 @@ export const Gameplay = () => {
 
         <div className='flex justify-center gap-2 mb-8'>
           {currentGuess.map((letter, index) => (
-           <input
-           key={index}
-           ref={(el) => (inputRefs.current[index] = el)}
-           value={letter}
-           maxLength={1}
-           onClick={() => inputRefs.current[index]?.focus()} 
-           onKeyDown={handleKeyPress} 
-           onChange={(e) => letterOnchange(index-1, e.target.value)}
-           className='w-12 h-12 bg-[#2d2d2d] text-[#EDEDED] text-center text-2xl font-bold rounded'
-         />
+            <input
+              key={index}
+              ref={(el) => (inputRefs.current[index] = el)}
+              value={letter}
+              maxLength={1}
+              inputMode="text"
+              type="text"
+              autoCapitalize="characters"
+              onClick={() => inputRefs.current[index]?.focus()}
+              onChange={(e) => handleInput(index, e.target.value)}
+              className='w-12 h-12 bg-[#2d2d2d] text-[#EDEDED] text-center text-2xl font-bold rounded'
+            />
           ))}
         </div>
 
